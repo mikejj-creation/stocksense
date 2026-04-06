@@ -33,5 +33,7 @@ class TTLCache:
 
 
 # Shared cache instances
-price_cache = TTLCache(default_ttl=300)  # 5 min for price data
-quote_cache = TTLCache(default_ttl=60)   # 1 min for live quotes
+price_cache = TTLCache(default_ttl=300)   # 5 min for price data
+quote_cache = TTLCache(default_ttl=60)    # 1 min for live quotes
+filings_cache = TTLCache(default_ttl=1800)  # 30 min for filing metadata
+cik_cache = TTLCache(default_ttl=86400)   # 24 hr for CIK map

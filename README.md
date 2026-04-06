@@ -46,26 +46,29 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 |------|-------------|
 | `price_history` | Get historical OHLCV price data for any ticker |
 | `quote` | Get current price, market cap, P/E, 52-week range |
+| `search_filings` | Search SEC EDGAR filings (10-K, 10-Q, 8-K) |
+| `get_filing` | Get full text of a specific SEC filing |
+| `insider_trades` | Get recent insider buys/sells from Form 4 filings |
 
 ### Example queries
 
 - "What's AAPL's price history for the last month?"
 - "Get me a quote for MSFT"
 - "Show me TSLA's weekly prices over the past year"
+- "Show me Apple's recent 10-K filings"
+- "What insider trades happened at Tesla recently?"
 
 ## Planned Tools
 
 | Tool | Description |
 |------|-------------|
-| `search_sec_filings` | Search and retrieve SEC EDGAR filings (10-K, 10-Q, 8-K) |
 | `get_financials` | Get company financial statements and ratios |
-| `get_insider_trades` | Track insider buying/selling activity |
 | `analyze_company` | AI-generated research brief with bull/bear cases |
 
 ## Data Sources
 
 - **yfinance** — price data and quotes
-- **SEC EDGAR** (coming soon) — free, unlimited filings
+- **SEC EDGAR** — free, unlimited filings and insider trades (no API key needed)
 - **Financial Modeling Prep / Alpha Vantage** (coming soon) — fundamentals
 
 ## Development
