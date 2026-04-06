@@ -18,5 +18,8 @@ dev = [
     "ruff",
 ]
 
+[project.scripts]
+mcp-finance = "mcp_finance.server:main"
+
 [tool.setuptools.packages.find]
 where = ["src"]

@@ -2,11 +2,56 @@
 
 An MCP (Model Context Protocol) server that gives AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, and price history.
 
-Think of it as "Context7 for finance" — Context7 provides docs to LLMs, this provides financial data.
+## Installation
 
-## Status
+```bash
+pip install -e .
+```
 
-Early development. Coming soon.
+For development:
+
+```bash
+pip install -e ".[dev]"
+```
+
+## Usage
+
+### Run the server
+
+```bash
+# Either:
+mcp-finance
+
+# Or:
+python -m mcp_finance
+```
+
+### Claude Desktop configuration
+
+Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "finance": {
+      "command": "mcp-finance"
+    }
+  }
+}
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `price_history` | Get historical OHLCV price data for any ticker |
+| `quote` | Get current price, market cap, P/E, 52-week range |
+
+### Example queries
+
+- "What's AAPL's price history for the last month?"
+- "Get me a quote for MSFT"
+- "Show me TSLA's weekly prices over the past year"
 
 ## Planned Tools
 
@@ -15,20 +60,23 @@ Early development. Coming soon.
 | `search_sec_filings` | Search and retrieve SEC EDGAR filings (10-K, 10-Q, 8-K) |
 | `get_financials` | Get company financial statements and ratios |
 | `get_insider_trades` | Track insider buying/selling activity |
-| `get_price_history` | Historical price data for any ticker |
 | `analyze_company` | AI-generated research brief with bull/bear cases |
 
 ## Data Sources
 
-- SEC EDGAR (free, unlimited)
-- Financial Modeling Prep / Alpha Vantage (fundamentals)
-- yfinance (price data)
+- **yfinance** — price data and quotes
+- **SEC EDGAR** (coming soon) — free, unlimited filings
+- **Financial Modeling Prep / Alpha Vantage** (coming soon) — fundamentals
 
-## Compatible With
+## Development
 
-- Claude Desktop
-- Cursor
-- Any MCP-compatible AI client
+```bash
+# Run tests
+pytest
+
+# Run linter
+ruff check src/ tests/
+```
 
 ## License
 
