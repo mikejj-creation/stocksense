@@ -105,3 +105,241 @@ SEC EDGAR provides:
 2. In Claude Desktop: "Show me Apple's recent 10-K filings"
 3. In Claude Desktop: "What insider trades happened at Tesla recently?"
 4. Existing price tools still work (no regressions)
+
+---
+
+## Milestone 3: Financial Statements & Company Analysis
+
+**Status: COMPLETE**
+
+Add the final two tools: `get_financials` for financial statements/ratios and `analyze_company` for an AI-friendly research summary. Both use free data sources only (yfinance + EDGAR) — no paid API keys needed.
+
+### Context
+
+The ai-investment-research-engine shows that yfinance provides:
+- Income statement, balance sheet, cash flow via `Ticker.financials`, `Ticker.balance_sheet`, `Ticker.cashflow`
+- Key ratios and stats via `Ticker.info`
+- Analyst recommendations via `Ticker.recommendations`
+
+For `analyze_company`, we aggregate data from all existing tools into a structured research brief the LLM can reason over — we don't call an LLM ourselves, we give the LLM the raw material to analyze.
+
+### Action Items
+
+#### Data Layer
+
+- [x] `src/mcp_finance/data/market.py` — Add financial statement fetching
+  - [x] `fetch_financials(ticker, statement)` — Income statement, balance sheet, cash flow from yfinance
+  - [x] `fetch_analyst_info(ticker)` — Analyst recommendations and target prices from yfinance
+  - [x] Cache with 30 min TTL (financials don't change intraday)
+
+#### Tools
+
+- [x] `src/mcp_finance/tools/financials.py` — MCP tool definitions
+  - [x] `get_financials(ticker, statement="income")` — Return financial statement data
+    - `statement` options: `income`, `balance_sheet`, `cash_flow`, `all`
+    - Returns structured dict with annual data, rounded for LLM readability
+    - Include key ratios: profit margin, ROE, debt/equity, current ratio, etc.
+- [x] `src/mcp_finance/tools/analyze.py` — MCP tool definitions
+  - [x] `analyze_company(ticker)` — Aggregate research brief
+    - Current quote + price context (52-week range, % from high/low)
+    - Key financial metrics (revenue, net income, margins, growth)
+    - Recent insider trading summary (net buys vs sells)
+    - Recent SEC filings (latest 10-K/10-Q dates)
+    - Analyst consensus (target price, recommendation)
+    - All data structured for LLM to generate bull/bear thesis
+
+#### Server Registration
+
+- [x] `src/mcp_finance/server.py` — Register `financials` and `analyze_company` tools
+
+#### Tests
+
+- [x] `tests/test_financials.py` — 8 tests
+  - [x] Test income statement returns valid data
+  - [x] Test balance sheet returns valid data
+  - [x] Test cash flow returns valid data
+  - [x] Test `statement="all"` returns all three
+  - [x] Test invalid ticker handling
+  - [x] Test invalid statement type handling
+  - [x] Test ratios included
+  - [x] Test tool output format
+- [x] `tests/test_analyze.py` — 4 tests
+  - [x] Test returns structured research brief with all sections
+  - [x] Test price context computation
+  - [x] Test insider summary aggregation
+  - [x] Test invalid ticker graceful degradation
+
+#### Docs
+
+- [x] `README.md` — Add `financials` and `analyze_company` to tools table, update examples
+
+### Key Decisions
+
+- **yfinance for financials** — Free, no API key, covers income/balance/cash flow
+- **No paid API dependency** — Keeps the project accessible to everyone
+- **`analyze_company` is data aggregation, not LLM generation** — We collect and structure the data; the connected LLM does the analysis
+- **Annual financials only** — Quarterly data is noisier and yfinance's quarterly coverage is inconsistent
+- **Key ratios computed from raw data** — Profit margin, ROE, debt-to-equity, current ratio derived from statements
+
+### Verification
+
+1. `pytest` — All new + existing tests pass
+2. In Claude Desktop: "Show me Apple's financial statements"
+3. In Claude Desktop: "Give me a research brief on Tesla"
+4. Existing tools still work (no regressions)
+5. All planned tools from CLAUDE.md now implemented
+
+---
+
+## Milestone 4: Production Readiness & Packaging
+
+**Status: COMPLETE**
+
+Polish the project for public consumption: proper PyPI metadata, input validation, linting, MIT license.
+
+### Action Items
+
+- [x] `pyproject.toml` — Full PyPI metadata (description, keywords, classifiers, URLs, version constraints)
+- [x] `src/mcp_finance/__init__.py` — Add `__version__`
+- [x] `src/mcp_finance/tools/validation.py` — Input validation module
+  - [x] Ticker format validation (regex, normalization)
+  - [x] Period, interval, statement, limit validation with clear error messages
+- [x] `src/mcp_finance/server.py` — Wire validation into all tool endpoints
+- [x] `LICENSE` — MIT license file
+- [x] `tests/test_validation.py` — 18 validation tests
+- [x] Ruff linting — All lint issues fixed, 0 errors
+- [x] All auto-fixable import sorting applied across codebase
+
+### Key Decisions
+
+- **Validation at server layer** — Tools get clean inputs, data layer stays simple
+- **Clear error messages** — List valid options on invalid input
+- **Ticker regex** — 1-5 letters, optional `.X` or `-X` suffix (handles BRK.B, BRK-B)
+- **Limit caps** — Prevent excessive API calls (100 default, 50 for insider trades)
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 59/59 tests pass
+3. Invalid inputs return helpful error messages
+
+---
+
+## Milestone 5: CI/CD & Compare Tool
+
+**Status: COMPLETE**
+
+Add GitHub Actions CI pipeline and a company comparison tool for multi-ticker analysis.
+
+### Action Items
+
+- [x] `.github/workflows/ci.yml` — GitHub Actions CI
+  - [x] Lint job (ruff on Python 3.11)
+  - [x] Test job (unit tests on Python 3.11, 3.12, 3.13)
+  - [x] Runs on push to main and PRs
+- [x] `src/mcp_finance/tools/compare.py` — Company comparison tool
+  - [x] `compare_companies(tickers)` — Side-by-side metrics comparison
+  - [x] Fetches quote + financials for each ticker
+  - [x] Graceful degradation on individual ticker failures
+- [x] `src/mcp_finance/server.py` — Register `compare_companies` tool with validation
+- [x] `tests/test_compare.py` — 4 comparison tests
+- [x] `README.md` — Add `compare_companies` to tools table and examples
+
+### Key Decisions
+
+- **Unit tests only in CI** — Integration tests hit live APIs, unsuitable for CI
+- **Max 10 tickers** — Prevents excessive API calls in a single comparison
+- **Graceful partial failures** — If one ticker fails, others still return data
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 63/63 tests pass
+3. 8 tools registered in server
+
+---
+
+## Milestone 6: Earnings History & Company Profile
+
+**Status: COMPLETE**
+
+Add earnings history (EPS estimates vs actuals) and company profile (sector, industry, business description) tools. Enhance `analyze_company` to include earnings and profile data.
+
+### Action Items
+
+- [x] `src/mcp_finance/data/market.py` — Add data fetching
+  - [x] `fetch_earnings_history(ticker)` — Quarterly EPS data from yfinance
+  - [x] `fetch_sector_info(ticker)` — Sector, industry, employee count, business summary
+- [x] `src/mcp_finance/tools/earnings.py` — `get_earnings` tool
+- [x] `src/mcp_finance/tools/company_profile.py` — `get_company_profile` tool
+- [x] `src/mcp_finance/tools/analyze.py` — Enhanced with earnings + profile sections
+- [x] `src/mcp_finance/server.py` — Register `earnings` and `company_profile` tools
+- [x] `tests/test_earnings.py` — 4 earnings tests
+- [x] `tests/test_company_profile.py` — 4 company profile tests
+- [x] `README.md` — Add new tools and example queries
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 71/71 tests pass
+3. 10 tools registered in server
+
+---
+
+## Milestone 7: Dividends & Key Events
+
+**Status: COMPLETE**
+
+Add dividend history/yield tool and upcoming key events (earnings dates, estimates, ex-dividend dates).
+
+### Action Items
+
+- [x] `src/mcp_finance/data/market.py` — Add data fetching
+  - [x] `fetch_dividends(ticker)` — Dividend history, rate, yield, payout ratio
+  - [x] `fetch_key_events(ticker)` — Upcoming earnings dates, EPS/revenue estimates, ex-dividend date
+- [x] `src/mcp_finance/tools/dividends.py` — `get_dividends` tool
+- [x] `src/mcp_finance/tools/events.py` — `get_key_events` tool
+- [x] `src/mcp_finance/server.py` — Register `dividends` and `key_events` tools
+- [x] `tests/test_dividends.py` — 4 dividend tests
+- [x] `tests/test_events.py` — 4 events tests
+- [x] `README.md` — Add new tools and example queries
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 79/79 tests pass
+3. 12 tools registered in server
+
+---
+
+## Milestone 8: Technical Indicators
+
+**Status: COMPLETE**
+
+Add technical analysis tool computing SMA, EMA, RSI, MACD, signals, and performance stats — all derived from existing price data with no new API calls.
+
+### Action Items
+
+- [x] `src/mcp_finance/data/technicals.py` — Technical indicator calculations
+  - [x] SMA (20, 50, 200-day)
+  - [x] EMA (12, 26-day)
+  - [x] RSI (14-day)
+  - [x] MACD (12/26/9)
+  - [x] Performance stats (1w, 1m, 3m, 6m, YTD)
+  - [x] Trading signals (overbought/oversold, MA crossovers)
+- [x] `src/mcp_finance/tools/technicals.py` — `get_technicals` tool
+- [x] `src/mcp_finance/server.py` — Register `technicals` tool
+- [x] `tests/test_technicals.py` — 11 tests (unit + integration)
+- [x] `README.md` — Add new tool and example queries
+
+### Key Decisions
+
+- **No external dependencies** — All indicators computed from price data using stdlib math
+- **Signals included** — Human-readable "overbought"/"oversold"/"neutral" and MA crossover signals
+- **Performance stats** — 1w, 1m, 3m, 6m, YTD percentage returns
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 90/90 tests pass
+3. 13 tools registered in server

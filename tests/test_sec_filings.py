@@ -1,6 +1,6 @@
 """Tests for SEC filings tool output format."""
 
-from mcp_finance.tools.sec_filings import search_filings, get_filing
+from mcp_finance.tools.sec_filings import get_filing, search_filings
 
 
 class TestSearchFilings:

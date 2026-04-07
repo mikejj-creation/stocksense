@@ -1,0 +1,3 @@
+"""MCP Finance Server — financial data for AI agents."""
+
+__version__ = "0.1.0"
