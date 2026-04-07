@@ -54,6 +54,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 | `compare_companies` | Compare key metrics across multiple companies side-by-side |
 | `earnings` | Quarterly earnings history with EPS estimates vs actuals |
 | `company_profile` | Company profile: sector, industry, and business description |
+| `dividends` | Dividend history and current yield |
+| `key_events` | Upcoming earnings dates, ex-dividend date, and estimates |
 
 ### Example queries
 
@@ -67,6 +69,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - "Compare AAPL, MSFT, and GOOGL"
 - "Show me Apple's earnings history"
 - "What sector is NVIDIA in?"
+- "Show me AAPL's dividend history"
+- "When is Microsoft's next earnings date?"
 
 ## Data Sources
 

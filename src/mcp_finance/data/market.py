@@ -184,6 +184,90 @@ def fetch_analyst_info(ticker: str) -> dict:
     return result
 
 
+def fetch_dividends(ticker: str) -> dict:
+    """Fetch dividend history and current yield for a ticker."""
+    cache_key = f"dividends:{ticker}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info or {}
+        divs = t.dividends
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch dividends for {ticker}: {e}") from e
+
+    if not info.get("shortName"):
+        raise ValueError(f"No dividend data available for ticker '{ticker}'")
+
+    history = []
+    if divs is not None and not divs.empty:
+        for date_idx, amount in divs.items():
+            history.append({
+                "date": date_idx.strftime("%Y-%m-%d"),
+                "amount": round(float(amount), 4),
+            })
+
+    result = {
+        "ticker": ticker.upper(),
+        "name": info.get("shortName"),
+        "dividend_rate": info.get("dividendRate"),
+        "dividend_yield": info.get("dividendYield"),
+        "payout_ratio": info.get("payoutRatio"),
+        "five_year_avg_yield": info.get("fiveYearAvgDividendYield"),
+        "ex_dividend_date": info.get("exDividendDate"),
+        "history": history[-20:],  # Last 20 dividends
+    }
+
+    financials_cache.set(cache_key, result)
+    return result
+
+
+def fetch_key_events(ticker: str) -> dict:
+    """Fetch upcoming key dates and events for a ticker."""
+    cache_key = f"events:{ticker}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info or {}
+        cal = t.calendar or {}
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch events for {ticker}: {e}") from e
+
+    if not info.get("shortName"):
+        raise ValueError(f"No event data available for ticker '{ticker}'")
+
+    earnings_dates = cal.get("Earnings Date", [])
+    earnings_date_strs = []
+    for d in (earnings_dates if isinstance(earnings_dates, list) else [earnings_dates]):
+        if d is not None:
+            earnings_date_strs.append(d.isoformat() if hasattr(d, "isoformat") else str(d))
+
+    ex_div = cal.get("Ex-Dividend Date")
+    div_date = cal.get("Dividend Date")
+
+    result = {
+        "ticker": ticker.upper(),
+        "name": info.get("shortName"),
+        "upcoming_earnings": earnings_date_strs,
+        "earnings_estimate": {
+            "eps_average": cal.get("Earnings Average"),
+            "eps_high": cal.get("Earnings High"),
+            "eps_low": cal.get("Earnings Low"),
+            "revenue_average": cal.get("Revenue Average"),
+        },
+        "ex_dividend_date": ex_div.isoformat() if hasattr(ex_div, "isoformat") else None,
+        "dividend_date": div_date.isoformat() if hasattr(div_date, "isoformat") else None,
+    }
+
+    financials_cache.set(cache_key, result)
+    return result
+
+
 def fetch_earnings_history(ticker: str) -> dict:
     """Fetch quarterly earnings history (EPS estimates vs actuals)."""
     cache_key = f"earnings:{ticker}"

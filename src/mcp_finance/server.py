@@ -5,7 +5,9 @@ from mcp.server.fastmcp import FastMCP
 from mcp_finance.tools.analyze import analyze_company as _analyze_company
 from mcp_finance.tools.company_profile import get_company_profile as _get_company_profile
 from mcp_finance.tools.compare import compare_companies as _compare_companies
+from mcp_finance.tools.dividends import get_dividends as _get_dividends
 from mcp_finance.tools.earnings import get_earnings as _get_earnings
+from mcp_finance.tools.events import get_key_events as _get_key_events
 from mcp_finance.tools.financials import get_financials as _get_financials
 from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_trades
 from mcp_finance.tools.price_history import get_price_history, get_quote
@@ -148,6 +150,28 @@ def company_profile(ticker: str) -> dict:
     """
     ticker = validate_ticker(ticker)
     return _get_company_profile(ticker)
+
+
+@mcp.tool()
+def dividends(ticker: str) -> dict:
+    """Get dividend history and current yield for a company.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    ticker = validate_ticker(ticker)
+    return _get_dividends(ticker)
+
+
+@mcp.tool()
+def key_events(ticker: str) -> dict:
+    """Get upcoming key dates: earnings dates, ex-dividend date, and EPS/revenue estimates.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    ticker = validate_ticker(ticker)
+    return _get_key_events(ticker)
 
 
 def main():

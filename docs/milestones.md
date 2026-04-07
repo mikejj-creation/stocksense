@@ -283,3 +283,29 @@ Add earnings history (EPS estimates vs actuals) and company profile (sector, ind
 1. `ruff check src/ tests/` — 0 errors
 2. `pytest` — 71/71 tests pass
 3. 10 tools registered in server
+
+---
+
+## Milestone 7: Dividends & Key Events
+
+**Status: COMPLETE**
+
+Add dividend history/yield tool and upcoming key events (earnings dates, estimates, ex-dividend dates).
+
+### Action Items
+
+- [x] `src/mcp_finance/data/market.py` — Add data fetching
+  - [x] `fetch_dividends(ticker)` — Dividend history, rate, yield, payout ratio
+  - [x] `fetch_key_events(ticker)` — Upcoming earnings dates, EPS/revenue estimates, ex-dividend date
+- [x] `src/mcp_finance/tools/dividends.py` — `get_dividends` tool
+- [x] `src/mcp_finance/tools/events.py` — `get_key_events` tool
+- [x] `src/mcp_finance/server.py` — Register `dividends` and `key_events` tools
+- [x] `tests/test_dividends.py` — 4 dividend tests
+- [x] `tests/test_events.py` — 4 events tests
+- [x] `README.md` — Add new tools and example queries
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 79/79 tests pass
+3. 12 tools registered in server
