@@ -49,6 +49,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 | `search_filings` | Search SEC EDGAR filings (10-K, 10-Q, 8-K) |
 | `get_filing` | Get full text of a specific SEC filing |
 | `insider_trades` | Get recent insider buys/sells from Form 4 filings |
+| `financials` | Get income statement, balance sheet, cash flow, and key ratios |
+| `analyze_company` | Comprehensive research brief aggregating all data sources |
 
 ### Example queries
 
@@ -57,19 +59,13 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - "Show me TSLA's weekly prices over the past year"
 - "Show me Apple's recent 10-K filings"
 - "What insider trades happened at Tesla recently?"
-
-## Planned Tools
-
-| Tool | Description |
-|------|-------------|
-| `get_financials` | Get company financial statements and ratios |
-| `analyze_company` | AI-generated research brief with bull/bear cases |
+- "Show me Apple's financial statements"
+- "Give me a research brief on Tesla"
 
 ## Data Sources
 
-- **yfinance** — price data and quotes
+- **yfinance** — price data, quotes, financial statements, analyst consensus
 - **SEC EDGAR** — free, unlimited filings and insider trades (no API key needed)
-- **Financial Modeling Prep / Alpha Vantage** (coming soon) — fundamentals
 
 ## Development
 

@@ -105,3 +105,86 @@ SEC EDGAR provides:
 2. In Claude Desktop: "Show me Apple's recent 10-K filings"
 3. In Claude Desktop: "What insider trades happened at Tesla recently?"
 4. Existing price tools still work (no regressions)
+
+---
+
+## Milestone 3: Financial Statements & Company Analysis
+
+**Status: COMPLETE**
+
+Add the final two tools: `get_financials` for financial statements/ratios and `analyze_company` for an AI-friendly research summary. Both use free data sources only (yfinance + EDGAR) — no paid API keys needed.
+
+### Context
+
+The ai-investment-research-engine shows that yfinance provides:
+- Income statement, balance sheet, cash flow via `Ticker.financials`, `Ticker.balance_sheet`, `Ticker.cashflow`
+- Key ratios and stats via `Ticker.info`
+- Analyst recommendations via `Ticker.recommendations`
+
+For `analyze_company`, we aggregate data from all existing tools into a structured research brief the LLM can reason over — we don't call an LLM ourselves, we give the LLM the raw material to analyze.
+
+### Action Items
+
+#### Data Layer
+
+- [x] `src/mcp_finance/data/market.py` — Add financial statement fetching
+  - [x] `fetch_financials(ticker, statement)` — Income statement, balance sheet, cash flow from yfinance
+  - [x] `fetch_analyst_info(ticker)` — Analyst recommendations and target prices from yfinance
+  - [x] Cache with 30 min TTL (financials don't change intraday)
+
+#### Tools
+
+- [x] `src/mcp_finance/tools/financials.py` — MCP tool definitions
+  - [x] `get_financials(ticker, statement="income")` — Return financial statement data
+    - `statement` options: `income`, `balance_sheet`, `cash_flow`, `all`
+    - Returns structured dict with annual data, rounded for LLM readability
+    - Include key ratios: profit margin, ROE, debt/equity, current ratio, etc.
+- [x] `src/mcp_finance/tools/analyze.py` — MCP tool definitions
+  - [x] `analyze_company(ticker)` — Aggregate research brief
+    - Current quote + price context (52-week range, % from high/low)
+    - Key financial metrics (revenue, net income, margins, growth)
+    - Recent insider trading summary (net buys vs sells)
+    - Recent SEC filings (latest 10-K/10-Q dates)
+    - Analyst consensus (target price, recommendation)
+    - All data structured for LLM to generate bull/bear thesis
+
+#### Server Registration
+
+- [x] `src/mcp_finance/server.py` — Register `financials` and `analyze_company` tools
+
+#### Tests
+
+- [x] `tests/test_financials.py` — 8 tests
+  - [x] Test income statement returns valid data
+  - [x] Test balance sheet returns valid data
+  - [x] Test cash flow returns valid data
+  - [x] Test `statement="all"` returns all three
+  - [x] Test invalid ticker handling
+  - [x] Test invalid statement type handling
+  - [x] Test ratios included
+  - [x] Test tool output format
+- [x] `tests/test_analyze.py` — 4 tests
+  - [x] Test returns structured research brief with all sections
+  - [x] Test price context computation
+  - [x] Test insider summary aggregation
+  - [x] Test invalid ticker graceful degradation
+
+#### Docs
+
+- [x] `README.md` — Add `financials` and `analyze_company` to tools table, update examples
+
+### Key Decisions
+
+- **yfinance for financials** — Free, no API key, covers income/balance/cash flow
+- **No paid API dependency** — Keeps the project accessible to everyone
+- **`analyze_company` is data aggregation, not LLM generation** — We collect and structure the data; the connected LLM does the analysis
+- **Annual financials only** — Quarterly data is noisier and yfinance's quarterly coverage is inconsistent
+- **Key ratios computed from raw data** — Profit margin, ROE, debt-to-equity, current ratio derived from statements
+
+### Verification
+
+1. `pytest` — All new + existing tests pass
+2. In Claude Desktop: "Show me Apple's financial statements"
+3. In Claude Desktop: "Give me a research brief on Tesla"
+4. Existing tools still work (no regressions)
+5. All planned tools from CLAUDE.md now implemented

@@ -2,7 +2,7 @@
 
 import yfinance as yf
 
-from mcp_finance.data.cache import price_cache, quote_cache
+from mcp_finance.data.cache import financials_cache, price_cache, quote_cache
 
 
 def fetch_price_history(
@@ -86,3 +86,99 @@ def fetch_quote(ticker: str) -> dict:
 
     quote_cache.set(cache_key, quote)
     return quote
+
+
+def _df_to_records(df, label: str) -> list[dict]:
+    """Convert a yfinance financial DataFrame to list of dicts with period keys."""
+    if df is None or df.empty:
+        return []
+    records = []
+    for col in df.columns:
+        period_label = col.strftime("%Y-%m-%d") if hasattr(col, "strftime") else str(col)
+        row_data = {}
+        for idx, val in df[col].items():
+            if val is not None and not (isinstance(val, float) and __import__("math").isnan(val)):
+                row_data[str(idx)] = round(float(val), 2) if isinstance(val, (int, float)) else val
+        records.append({"period": period_label, **row_data})
+    return records
+
+
+def fetch_financials(ticker: str, statement: str = "income") -> dict:
+    """Fetch financial statements for a ticker.
+
+    Args:
+        statement: "income", "balance_sheet", "cash_flow", or "all"
+
+    Returns dict with statement data as list of dicts per period.
+    """
+    cache_key = f"financials:{ticker}:{statement}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info or {}
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch financials for {ticker}: {e}") from e
+
+    if not info.get("shortName"):
+        raise ValueError(f"No financial data available for ticker '{ticker}'")
+
+    result = {"ticker": ticker.upper(), "name": info.get("shortName")}
+
+    statements = {
+        "income": ("income_statement", t.financials),
+        "balance_sheet": ("balance_sheet", t.balance_sheet),
+        "cash_flow": ("cash_flow", t.cashflow),
+    }
+
+    if statement == "all":
+        for key, (label, df) in statements.items():
+            result[label] = _df_to_records(df, label)
+    elif statement in statements:
+        label, df = statements[statement]
+        result[label] = _df_to_records(df, label)
+    else:
+        raise ValueError(f"Unknown statement type '{statement}'. Use: income, balance_sheet, cash_flow, all")
+
+    # Add key ratios from info
+    result["ratios"] = {
+        "profit_margin": info.get("profitMargins"),
+        "operating_margin": info.get("operatingMargins"),
+        "return_on_equity": info.get("returnOnEquity"),
+        "return_on_assets": info.get("returnOnAssets"),
+        "debt_to_equity": info.get("debtToEquity"),
+        "current_ratio": info.get("currentRatio"),
+        "revenue_growth": info.get("revenueGrowth"),
+        "earnings_growth": info.get("earningsGrowth"),
+    }
+
+    financials_cache.set(cache_key, result)
+    return result
+
+
+def fetch_analyst_info(ticker: str) -> dict:
+    """Fetch analyst recommendations and target prices."""
+    cache_key = f"analyst:{ticker}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info or {}
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch analyst info for {ticker}: {e}") from e
+
+    result = {
+        "ticker": ticker.upper(),
+        "recommendation": info.get("recommendationKey"),
+        "target_mean_price": info.get("targetMeanPrice"),
+        "target_high_price": info.get("targetHighPrice"),
+        "target_low_price": info.get("targetLowPrice"),
+        "number_of_analysts": info.get("numberOfAnalystOpinions"),
+    }
+
+    financials_cache.set(cache_key, result)
+    return result

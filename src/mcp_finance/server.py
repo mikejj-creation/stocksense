@@ -2,6 +2,8 @@
 
 from mcp.server.fastmcp import FastMCP
 
+from mcp_finance.tools.analyze import analyze_company as _analyze_company
+from mcp_finance.tools.financials import get_financials as _get_financials
 from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_trades
 from mcp_finance.tools.price_history import get_price_history, get_quote
 from mcp_finance.tools.sec_filings import get_filing as _get_filing
@@ -64,6 +66,27 @@ def insider_trades(ticker: str, limit: int = 20) -> dict:
         limit: Maximum number of Form 4 filings to parse (default 20)
     """
     return _get_insider_trades(ticker, limit)
+
+
+@mcp.tool()
+def financials(ticker: str, statement: str = "income") -> dict:
+    """Get financial statements and key ratios for a company.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+        statement: Statement type — income, balance_sheet, cash_flow, or all
+    """
+    return _get_financials(ticker, statement)
+
+
+@mcp.tool()
+def analyze_company(ticker: str) -> dict:
+    """Get a comprehensive research brief for a company, aggregating price, financials, insider trades, SEC filings, and analyst data.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    return _analyze_company(ticker)
 
 
 def main():
