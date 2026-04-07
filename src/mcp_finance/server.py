@@ -3,7 +3,9 @@
 from mcp.server.fastmcp import FastMCP
 
 from mcp_finance.tools.analyze import analyze_company as _analyze_company
+from mcp_finance.tools.company_profile import get_company_profile as _get_company_profile
 from mcp_finance.tools.compare import compare_companies as _compare_companies
+from mcp_finance.tools.earnings import get_earnings as _get_earnings
 from mcp_finance.tools.financials import get_financials as _get_financials
 from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_trades
 from mcp_finance.tools.price_history import get_price_history, get_quote
@@ -124,6 +126,28 @@ def compare_companies(tickers: list[str]) -> dict:
         raise ValueError("Cannot compare more than 10 companies at once")
     validated = [validate_ticker(t) for t in tickers]
     return _compare_companies(validated)
+
+
+@mcp.tool()
+def earnings(ticker: str) -> dict:
+    """Get quarterly earnings history with EPS estimates vs actuals and surprise percentages.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    ticker = validate_ticker(ticker)
+    return _get_earnings(ticker)
+
+
+@mcp.tool()
+def company_profile(ticker: str) -> dict:
+    """Get company profile: sector, industry, employee count, and business description.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    ticker = validate_ticker(ticker)
+    return _get_company_profile(ticker)
 
 
 def main():

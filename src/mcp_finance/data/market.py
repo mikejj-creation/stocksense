@@ -182,3 +182,75 @@ def fetch_analyst_info(ticker: str) -> dict:
 
     financials_cache.set(cache_key, result)
     return result
+
+
+def fetch_earnings_history(ticker: str) -> dict:
+    """Fetch quarterly earnings history (EPS estimates vs actuals)."""
+    cache_key = f"earnings:{ticker}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        t = yf.Ticker(ticker)
+        info = t.info or {}
+        eh = t.earnings_history
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch earnings for {ticker}: {e}") from e
+
+    if not info.get("shortName"):
+        raise ValueError(f"No earnings data available for ticker '{ticker}'")
+
+    quarters = []
+    if eh is not None and not eh.empty:
+        for idx, row in eh.iterrows():
+            quarter_label = idx.strftime("%Y-%m-%d") if hasattr(idx, "strftime") else str(idx)
+            quarters.append({
+                "quarter": quarter_label,
+                "eps_actual": round(float(row.get("epsActual", 0)), 2),
+                "eps_estimate": round(float(row.get("epsEstimate", 0)), 2),
+                "eps_difference": round(float(row.get("epsDifference", 0)), 2),
+                "surprise_pct": round(float(row.get("surprisePercent", 0)) * 100, 1),
+            })
+
+    result = {
+        "ticker": ticker.upper(),
+        "name": info.get("shortName"),
+        "trailing_eps": info.get("trailingEps"),
+        "forward_eps": info.get("forwardEps"),
+        "earnings_growth": info.get("earningsGrowth"),
+        "quarters": quarters,
+    }
+
+    financials_cache.set(cache_key, result)
+    return result
+
+
+def fetch_sector_info(ticker: str) -> dict:
+    """Fetch sector, industry, and company profile for a ticker."""
+    cache_key = f"sector:{ticker}"
+    cached = financials_cache.get(cache_key)
+    if cached is not None:
+        return cached
+
+    try:
+        info = yf.Ticker(ticker).info or {}
+    except Exception as e:
+        raise RuntimeError(f"Failed to fetch sector info for {ticker}: {e}") from e
+
+    if not info.get("shortName"):
+        raise ValueError(f"No sector data available for ticker '{ticker}'")
+
+    result = {
+        "ticker": ticker.upper(),
+        "name": info.get("shortName"),
+        "sector": info.get("sector"),
+        "industry": info.get("industry"),
+        "full_time_employees": info.get("fullTimeEmployees"),
+        "country": info.get("country"),
+        "website": info.get("website"),
+        "summary": info.get("longBusinessSummary"),
+    }
+
+    financials_cache.set(cache_key, result)
+    return result

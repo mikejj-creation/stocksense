@@ -52,6 +52,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 | `financials` | Get income statement, balance sheet, cash flow, and key ratios |
 | `analyze_company` | Comprehensive research brief aggregating all data sources |
 | `compare_companies` | Compare key metrics across multiple companies side-by-side |
+| `earnings` | Quarterly earnings history with EPS estimates vs actuals |
+| `company_profile` | Company profile: sector, industry, and business description |
 
 ### Example queries
 
@@ -63,6 +65,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - "Show me Apple's financial statements"
 - "Give me a research brief on Tesla"
 - "Compare AAPL, MSFT, and GOOGL"
+- "Show me Apple's earnings history"
+- "What sector is NVIDIA in?"
 
 ## Data Sources
 

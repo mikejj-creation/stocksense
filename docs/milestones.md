@@ -256,3 +256,30 @@ Add GitHub Actions CI pipeline and a company comparison tool for multi-ticker an
 1. `ruff check src/ tests/` — 0 errors
 2. `pytest` — 63/63 tests pass
 3. 8 tools registered in server
+
+---
+
+## Milestone 6: Earnings History & Company Profile
+
+**Status: COMPLETE**
+
+Add earnings history (EPS estimates vs actuals) and company profile (sector, industry, business description) tools. Enhance `analyze_company` to include earnings and profile data.
+
+### Action Items
+
+- [x] `src/mcp_finance/data/market.py` — Add data fetching
+  - [x] `fetch_earnings_history(ticker)` — Quarterly EPS data from yfinance
+  - [x] `fetch_sector_info(ticker)` — Sector, industry, employee count, business summary
+- [x] `src/mcp_finance/tools/earnings.py` — `get_earnings` tool
+- [x] `src/mcp_finance/tools/company_profile.py` — `get_company_profile` tool
+- [x] `src/mcp_finance/tools/analyze.py` — Enhanced with earnings + profile sections
+- [x] `src/mcp_finance/server.py` — Register `earnings` and `company_profile` tools
+- [x] `tests/test_earnings.py` — 4 earnings tests
+- [x] `tests/test_company_profile.py` — 4 company profile tests
+- [x] `README.md` — Add new tools and example queries
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 71/71 tests pass
+3. 10 tools registered in server

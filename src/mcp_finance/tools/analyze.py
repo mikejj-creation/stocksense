@@ -1,7 +1,13 @@
 """MCP tool definitions for company analysis."""
 
 from mcp_finance.data.edgar import fetch_filings, fetch_insider_trades
-from mcp_finance.data.market import fetch_analyst_info, fetch_financials, fetch_quote
+from mcp_finance.data.market import (
+    fetch_analyst_info,
+    fetch_earnings_history,
+    fetch_financials,
+    fetch_quote,
+    fetch_sector_info,
+)
 
 
 def analyze_company(ticker: str) -> dict:
@@ -89,5 +95,29 @@ def analyze_company(ticker: str) -> dict:
         brief["analyst_consensus"] = analyst
     except Exception:
         brief["analyst_consensus"] = {"error": "Failed to fetch analyst data"}
+
+    # Earnings history
+    try:
+        earnings = fetch_earnings_history(ticker)
+        brief["earnings"] = {
+            "trailing_eps": earnings.get("trailing_eps"),
+            "forward_eps": earnings.get("forward_eps"),
+            "earnings_growth": earnings.get("earnings_growth"),
+            "recent_quarters": earnings.get("quarters", [])[:4],
+        }
+    except Exception:
+        brief["earnings"] = {"error": "Failed to fetch earnings data"}
+
+    # Company profile
+    try:
+        profile = fetch_sector_info(ticker)
+        brief["profile"] = {
+            "sector": profile.get("sector"),
+            "industry": profile.get("industry"),
+            "employees": profile.get("full_time_employees"),
+            "country": profile.get("country"),
+        }
+    except Exception:
+        brief["profile"] = {"error": "Failed to fetch profile data"}
 
     return brief
