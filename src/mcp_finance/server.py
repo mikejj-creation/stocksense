@@ -3,6 +3,7 @@
 from mcp.server.fastmcp import FastMCP
 
 from mcp_finance.tools.analyze import analyze_company as _analyze_company
+from mcp_finance.tools.compare import compare_companies as _compare_companies
 from mcp_finance.tools.financials import get_financials as _get_financials
 from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_trades
 from mcp_finance.tools.price_history import get_price_history, get_quote
@@ -108,6 +109,21 @@ def analyze_company(ticker: str) -> dict:
     """
     ticker = validate_ticker(ticker)
     return _analyze_company(ticker)
+
+
+@mcp.tool()
+def compare_companies(tickers: list[str]) -> dict:
+    """Compare key metrics across multiple companies side-by-side.
+
+    Args:
+        tickers: List of stock ticker symbols (e.g. ["AAPL", "MSFT", "GOOGL"])
+    """
+    if not tickers:
+        raise ValueError("Must provide at least one ticker")
+    if len(tickers) > 10:
+        raise ValueError("Cannot compare more than 10 companies at once")
+    validated = [validate_ticker(t) for t in tickers]
+    return _compare_companies(validated)
 
 
 def main():

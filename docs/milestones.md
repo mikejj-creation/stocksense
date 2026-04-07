@@ -222,3 +222,37 @@ Polish the project for public consumption: proper PyPI metadata, input validatio
 1. `ruff check src/ tests/` — 0 errors
 2. `pytest` — 59/59 tests pass
 3. Invalid inputs return helpful error messages
+
+---
+
+## Milestone 5: CI/CD & Compare Tool
+
+**Status: COMPLETE**
+
+Add GitHub Actions CI pipeline and a company comparison tool for multi-ticker analysis.
+
+### Action Items
+
+- [x] `.github/workflows/ci.yml` — GitHub Actions CI
+  - [x] Lint job (ruff on Python 3.11)
+  - [x] Test job (unit tests on Python 3.11, 3.12, 3.13)
+  - [x] Runs on push to main and PRs
+- [x] `src/mcp_finance/tools/compare.py` — Company comparison tool
+  - [x] `compare_companies(tickers)` — Side-by-side metrics comparison
+  - [x] Fetches quote + financials for each ticker
+  - [x] Graceful degradation on individual ticker failures
+- [x] `src/mcp_finance/server.py` — Register `compare_companies` tool with validation
+- [x] `tests/test_compare.py` — 4 comparison tests
+- [x] `README.md` — Add `compare_companies` to tools table and examples
+
+### Key Decisions
+
+- **Unit tests only in CI** — Integration tests hit live APIs, unsuitable for CI
+- **Max 10 tickers** — Prevents excessive API calls in a single comparison
+- **Graceful partial failures** — If one ticker fails, others still return data
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 63/63 tests pass
+3. 8 tools registered in server

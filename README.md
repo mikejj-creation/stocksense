@@ -51,6 +51,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 | `insider_trades` | Get recent insider buys/sells from Form 4 filings |
 | `financials` | Get income statement, balance sheet, cash flow, and key ratios |
 | `analyze_company` | Comprehensive research brief aggregating all data sources |
+| `compare_companies` | Compare key metrics across multiple companies side-by-side |
 
 ### Example queries
 
@@ -61,6 +62,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - "What insider trades happened at Tesla recently?"
 - "Show me Apple's financial statements"
 - "Give me a research brief on Tesla"
+- "Compare AAPL, MSFT, and GOOGL"
 
 ## Data Sources
 
