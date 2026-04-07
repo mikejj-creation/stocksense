@@ -1,6 +1,5 @@
 """Tests for company analysis tool."""
 
-import pytest
 
 from mcp_finance.tools.analyze import analyze_company
 

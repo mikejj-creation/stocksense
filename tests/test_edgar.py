@@ -4,8 +4,8 @@ import pytest
 
 from mcp_finance.data.edgar import (
     _resolve_cik,
-    fetch_filings,
     fetch_filing_document,
+    fetch_filings,
     fetch_insider_trades,
 )
 

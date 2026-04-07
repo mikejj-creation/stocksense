@@ -8,6 +8,13 @@ from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_
 from mcp_finance.tools.price_history import get_price_history, get_quote
 from mcp_finance.tools.sec_filings import get_filing as _get_filing
 from mcp_finance.tools.sec_filings import search_filings as _search_filings
+from mcp_finance.tools.validation import (
+    validate_interval,
+    validate_limit,
+    validate_period,
+    validate_statement,
+    validate_ticker,
+)
 
 mcp = FastMCP("mcp-finance")
 
@@ -21,6 +28,9 @@ def price_history(ticker: str, period: str = "1mo", interval: str = "1d") -> dic
         period: Time period — 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, max
         interval: Data interval — 1m, 5m, 15m, 1h, 1d, 1wk, 1mo
     """
+    ticker = validate_ticker(ticker)
+    period = validate_period(period)
+    interval = validate_interval(interval)
     return get_price_history(ticker, period, interval)
 
 
@@ -31,6 +41,7 @@ def quote(ticker: str) -> dict:
     Args:
         ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
     """
+    ticker = validate_ticker(ticker)
     return get_quote(ticker)
 
 
@@ -43,6 +54,8 @@ def search_filings(ticker: str, form_type: str = "10-K", limit: int = 10) -> dic
         form_type: SEC form type — 10-K (annual), 10-Q (quarterly), 8-K (current events)
         limit: Maximum number of filings to return (default 10)
     """
+    ticker = validate_ticker(ticker)
+    limit = validate_limit(limit)
     return _search_filings(ticker, form_type, limit)
 
 
@@ -54,6 +67,7 @@ def get_filing(ticker: str, accession_number: str) -> dict:
         ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
         accession_number: SEC accession number from search_filings results (e.g. 0000320193-24-000123)
     """
+    ticker = validate_ticker(ticker)
     return _get_filing(ticker, accession_number)
 
 
@@ -65,6 +79,8 @@ def insider_trades(ticker: str, limit: int = 20) -> dict:
         ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
         limit: Maximum number of Form 4 filings to parse (default 20)
     """
+    ticker = validate_ticker(ticker)
+    limit = validate_limit(limit, max_limit=50)
     return _get_insider_trades(ticker, limit)
 
 
@@ -76,16 +92,21 @@ def financials(ticker: str, statement: str = "income") -> dict:
         ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
         statement: Statement type — income, balance_sheet, cash_flow, or all
     """
+    ticker = validate_ticker(ticker)
+    statement = validate_statement(statement)
     return _get_financials(ticker, statement)
 
 
 @mcp.tool()
 def analyze_company(ticker: str) -> dict:
-    """Get a comprehensive research brief for a company, aggregating price, financials, insider trades, SEC filings, and analyst data.
+    """Get a comprehensive research brief for a company.
+
+    Aggregates price, financials, insider trades, SEC filings, and analyst data.
 
     Args:
         ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
     """
+    ticker = validate_ticker(ticker)
     return _analyze_company(ticker)
 
 

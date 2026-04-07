@@ -3,8 +3,8 @@
 import gzip
 import time
 import xml.etree.ElementTree as ET
-from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from mcp_finance.data.cache import cik_cache, filings_cache
 
@@ -153,7 +153,6 @@ def fetch_filing_document(ticker: str, accession_number: str) -> str:
 
     # Strip HTML tags for cleaner LLM consumption
     from html.parser import HTMLParser
-    from io import StringIO
 
     class _TextExtractor(HTMLParser):
         def __init__(self):

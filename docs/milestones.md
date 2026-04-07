@@ -188,3 +188,37 @@ For `analyze_company`, we aggregate data from all existing tools into a structur
 3. In Claude Desktop: "Give me a research brief on Tesla"
 4. Existing tools still work (no regressions)
 5. All planned tools from CLAUDE.md now implemented
+
+---
+
+## Milestone 4: Production Readiness & Packaging
+
+**Status: COMPLETE**
+
+Polish the project for public consumption: proper PyPI metadata, input validation, linting, MIT license.
+
+### Action Items
+
+- [x] `pyproject.toml` — Full PyPI metadata (description, keywords, classifiers, URLs, version constraints)
+- [x] `src/mcp_finance/__init__.py` — Add `__version__`
+- [x] `src/mcp_finance/tools/validation.py` — Input validation module
+  - [x] Ticker format validation (regex, normalization)
+  - [x] Period, interval, statement, limit validation with clear error messages
+- [x] `src/mcp_finance/server.py` — Wire validation into all tool endpoints
+- [x] `LICENSE` — MIT license file
+- [x] `tests/test_validation.py` — 18 validation tests
+- [x] Ruff linting — All lint issues fixed, 0 errors
+- [x] All auto-fixable import sorting applied across codebase
+
+### Key Decisions
+
+- **Validation at server layer** — Tools get clean inputs, data layer stays simple
+- **Clear error messages** — List valid options on invalid input
+- **Ticker regex** — 1-5 letters, optional `.X` or `-X` suffix (handles BRK.B, BRK-B)
+- **Limit caps** — Prevent excessive API calls (100 default, 50 for insider trades)
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 59/59 tests pass
+3. Invalid inputs return helpful error messages

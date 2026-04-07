@@ -1,6 +1,6 @@
 """MCP tool definitions for SEC filings."""
 
-from mcp_finance.data.edgar import fetch_filings, fetch_filing_document
+from mcp_finance.data.edgar import fetch_filing_document, fetch_filings
 
 
 def search_filings(
