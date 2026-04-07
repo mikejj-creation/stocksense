@@ -56,6 +56,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 | `company_profile` | Company profile: sector, industry, and business description |
 | `dividends` | Dividend history and current yield |
 | `key_events` | Upcoming earnings dates, ex-dividend date, and estimates |
+| `technicals` | Technical indicators: SMA, EMA, RSI, MACD, and performance |
 
 ### Example queries
 
@@ -71,6 +72,7 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - "What sector is NVIDIA in?"
 - "Show me AAPL's dividend history"
 - "When is Microsoft's next earnings date?"
+- "What are Tesla's technical indicators?"
 
 ## Data Sources
 

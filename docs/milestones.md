@@ -309,3 +309,37 @@ Add dividend history/yield tool and upcoming key events (earnings dates, estimat
 1. `ruff check src/ tests/` — 0 errors
 2. `pytest` — 79/79 tests pass
 3. 12 tools registered in server
+
+---
+
+## Milestone 8: Technical Indicators
+
+**Status: COMPLETE**
+
+Add technical analysis tool computing SMA, EMA, RSI, MACD, signals, and performance stats — all derived from existing price data with no new API calls.
+
+### Action Items
+
+- [x] `src/mcp_finance/data/technicals.py` — Technical indicator calculations
+  - [x] SMA (20, 50, 200-day)
+  - [x] EMA (12, 26-day)
+  - [x] RSI (14-day)
+  - [x] MACD (12/26/9)
+  - [x] Performance stats (1w, 1m, 3m, 6m, YTD)
+  - [x] Trading signals (overbought/oversold, MA crossovers)
+- [x] `src/mcp_finance/tools/technicals.py` — `get_technicals` tool
+- [x] `src/mcp_finance/server.py` — Register `technicals` tool
+- [x] `tests/test_technicals.py` — 11 tests (unit + integration)
+- [x] `README.md` — Add new tool and example queries
+
+### Key Decisions
+
+- **No external dependencies** — All indicators computed from price data using stdlib math
+- **Signals included** — Human-readable "overbought"/"oversold"/"neutral" and MA crossover signals
+- **Performance stats** — 1w, 1m, 3m, 6m, YTD percentage returns
+
+### Verification
+
+1. `ruff check src/ tests/` — 0 errors
+2. `pytest` — 90/90 tests pass
+3. 13 tools registered in server

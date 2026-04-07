@@ -13,6 +13,7 @@ from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_
 from mcp_finance.tools.price_history import get_price_history, get_quote
 from mcp_finance.tools.sec_filings import get_filing as _get_filing
 from mcp_finance.tools.sec_filings import search_filings as _search_filings
+from mcp_finance.tools.technicals import get_technicals as _get_technicals
 from mcp_finance.tools.validation import (
     validate_interval,
     validate_limit,
@@ -172,6 +173,17 @@ def key_events(ticker: str) -> dict:
     """
     ticker = validate_ticker(ticker)
     return _get_key_events(ticker)
+
+
+@mcp.tool()
+def technicals(ticker: str) -> dict:
+    """Get technical indicators: moving averages (SMA/EMA), RSI, MACD, and performance stats.
+
+    Args:
+        ticker: Stock ticker symbol (e.g. AAPL, MSFT, GOOGL)
+    """
+    ticker = validate_ticker(ticker)
+    return _get_technicals(ticker)
 
 
 def main():
