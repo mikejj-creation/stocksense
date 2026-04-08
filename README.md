@@ -1,5 +1,10 @@
 # StockSense
 
+[![PyPI version](https://img.shields.io/pypi/v/stocksense)](https://pypi.org/project/stocksense/)
+[![PyPI downloads](https://img.shields.io/pypi/dm/stocksense)](https://pypi.org/project/stocksense/)
+[![Python versions](https://img.shields.io/pypi/pyversions/stocksense)](https://pypi.org/project/stocksense/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 An MCP (Model Context Protocol) server that gives AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, and price history.
 
 ## Installation
