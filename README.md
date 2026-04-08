@@ -1,41 +1,28 @@
 # StockSense
 
-mcp-name: io.github.mikejj-creation/stocksense
+<!-- mcp-name: io.github.mikejj-creation/stocksense -->
 
 [![PyPI version](https://img.shields.io/pypi/v/stocksense)](https://pypi.org/project/stocksense/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/stocksense)](https://pypi.org/project/stocksense/)
 [![Python versions](https://img.shields.io/pypi/pyversions/stocksense)](https://pypi.org/project/stocksense/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-An MCP (Model Context Protocol) server that gives AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, and price history.
+An MCP (Model Context Protocol) server that gives AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, and price history. No API keys needed.
 
-## Installation
+## Quick Start
 
-```bash
-pip install -e .
-```
-
-For development:
+### 1. Install
 
 ```bash
-pip install -e ".[dev]"
+pip install stocksense
 ```
 
-## Usage
+### 2. Add to Claude Desktop
 
-### Run the server
+Add to your Claude Desktop config:
 
-```bash
-# Either:
-stocksense
-
-# Or:
-python -m stocksense
-```
-
-### Claude Desktop configuration
-
-Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
 {
@@ -46,6 +33,10 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
   }
 }
 ```
+
+### 3. Restart Claude Desktop
+
+Quit and reopen Claude Desktop. You should see the hammer icon with 13 tools available.
 
 ### Available Tools
 
@@ -86,9 +77,19 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 - **yfinance** — price data, quotes, financial statements, analyst consensus
 - **SEC EDGAR** — free, unlimited filings and insider trades (no API key needed)
 
+## Requirements
+
+- Python 3.11+
+- No API keys needed — uses free public data sources
+
 ## Development
 
 ```bash
+# Clone and install for development
+git clone https://github.com/mikejj-creation/stocksense.git
+cd stocksense
+pip install -e ".[dev]"
+
 # Run tests
 pytest
 
