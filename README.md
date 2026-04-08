@@ -1,5 +1,7 @@
 # StockSense
 
+mcp-name: io.github.mikejj-creation/stocksense
+
 [![PyPI version](https://img.shields.io/pypi/v/stocksense)](https://pypi.org/project/stocksense/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/stocksense)](https://pypi.org/project/stocksense/)
 [![Python versions](https://img.shields.io/pypi/pyversions/stocksense)](https://pypi.org/project/stocksense/)
