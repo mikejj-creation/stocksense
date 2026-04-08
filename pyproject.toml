@@ -31,9 +31,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/mikejj-creation/mcp-finance-server"
-Repository = "https://github.com/mikejj-creation/mcp-finance-server"
-Issues = "https://github.com/mikejj-creation/mcp-finance-server/issues"
+Homepage = "https://github.com/mikejj-creation/stocksense"
+Repository = "https://github.com/mikejj-creation/stocksense"
+Issues = "https://github.com/mikejj-creation/stocksense/issues"
 
 [project.scripts]
 stocksense = "stocksense.server:main"
