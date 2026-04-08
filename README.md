@@ -97,6 +97,10 @@ pytest
 ruff check src/ tests/
 ```
 
+## Disclaimer
+
+StockSense uses free public data from Yahoo Finance and SEC EDGAR. Users are responsible for complying with each provider's terms of service. This tool is for informational purposes only — not financial advice.
+
 ## License
 
 MIT
