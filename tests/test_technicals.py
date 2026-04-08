@@ -2,7 +2,7 @@
 
 import pytest
 
-from mcp_finance.data.technicals import _ema, _rsi, _sma, compute_technicals
+from stocksense.data.technicals import _ema, _rsi, _sma, compute_technicals
 
 
 class TestSMA:

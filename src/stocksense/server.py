@@ -1,20 +1,20 @@
-"""MCP Finance Server — entry point."""
+"""StockSense — MCP server entry point."""
 
 from mcp.server.fastmcp import FastMCP
 
-from mcp_finance.tools.analyze import analyze_company as _analyze_company
-from mcp_finance.tools.company_profile import get_company_profile as _get_company_profile
-from mcp_finance.tools.compare import compare_companies as _compare_companies
-from mcp_finance.tools.dividends import get_dividends as _get_dividends
-from mcp_finance.tools.earnings import get_earnings as _get_earnings
-from mcp_finance.tools.events import get_key_events as _get_key_events
-from mcp_finance.tools.financials import get_financials as _get_financials
-from mcp_finance.tools.insider_trades import get_insider_trades as _get_insider_trades
-from mcp_finance.tools.price_history import get_price_history, get_quote
-from mcp_finance.tools.sec_filings import get_filing as _get_filing
-from mcp_finance.tools.sec_filings import search_filings as _search_filings
-from mcp_finance.tools.technicals import get_technicals as _get_technicals
-from mcp_finance.tools.validation import (
+from stocksense.tools.analyze import analyze_company as _analyze_company
+from stocksense.tools.company_profile import get_company_profile as _get_company_profile
+from stocksense.tools.compare import compare_companies as _compare_companies
+from stocksense.tools.dividends import get_dividends as _get_dividends
+from stocksense.tools.earnings import get_earnings as _get_earnings
+from stocksense.tools.events import get_key_events as _get_key_events
+from stocksense.tools.financials import get_financials as _get_financials
+from stocksense.tools.insider_trades import get_insider_trades as _get_insider_trades
+from stocksense.tools.price_history import get_price_history, get_quote
+from stocksense.tools.sec_filings import get_filing as _get_filing
+from stocksense.tools.sec_filings import search_filings as _search_filings
+from stocksense.tools.technicals import get_technicals as _get_technicals
+from stocksense.tools.validation import (
     validate_interval,
     validate_limit,
     validate_period,
@@ -22,7 +22,7 @@ from mcp_finance.tools.validation import (
     validate_ticker,
 )
 
-mcp = FastMCP("mcp-finance")
+mcp = FastMCP("stocksense")
 
 
 @mcp.tool()

@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_sector_info
-from mcp_finance.tools.company_profile import get_company_profile
+from stocksense.data.market import fetch_sector_info
+from stocksense.tools.company_profile import get_company_profile
 
 
 class TestFetchSectorInfo:

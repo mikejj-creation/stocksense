@@ -1,6 +1,6 @@
 """Tests for company comparison tool."""
 
-from mcp_finance.tools.compare import compare_companies
+from stocksense.tools.compare import compare_companies
 
 
 class TestCompareCompanies:

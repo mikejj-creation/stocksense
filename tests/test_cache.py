@@ -2,7 +2,7 @@
 
 import time
 
-from mcp_finance.data.cache import TTLCache
+from stocksense.data.cache import TTLCache
 
 
 def test_cache_set_and_get():

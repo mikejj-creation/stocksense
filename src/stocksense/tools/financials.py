@@ -1,6 +1,6 @@
 """MCP tool definitions for financial statements."""
 
-from mcp_finance.data.market import fetch_financials
+from stocksense.data.market import fetch_financials
 
 
 def get_financials(ticker: str, statement: str = "income") -> dict:

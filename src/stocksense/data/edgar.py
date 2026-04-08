@@ -6,10 +6,10 @@ import xml.etree.ElementTree as ET
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from mcp_finance.data.cache import cik_cache, filings_cache
+from stocksense.data.cache import cik_cache, filings_cache
 
 HEADERS = {
-    "User-Agent": "MCP-Finance-Server contact@mcp-finance.dev",
+    "User-Agent": "StockSense contact@stocksense.dev",
     "Accept-Encoding": "gzip, deflate",
 }
 

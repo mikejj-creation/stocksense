@@ -1,6 +1,6 @@
 """MCP tool definitions for company profile."""
 
-from mcp_finance.data.market import fetch_sector_info
+from stocksense.data.market import fetch_sector_info
 
 
 def get_company_profile(ticker: str) -> dict:

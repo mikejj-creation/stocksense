@@ -1,6 +1,6 @@
 """MCP tool definitions for technical indicators."""
 
-from mcp_finance.data.technicals import compute_technicals
+from stocksense.data.technicals import compute_technicals
 
 
 def get_technicals(ticker: str) -> dict:

@@ -2,7 +2,7 @@
 
 import pytest
 
-from mcp_finance.data.edgar import (
+from stocksense.data.edgar import (
     _resolve_cik,
     fetch_filing_document,
     fetch_filings,

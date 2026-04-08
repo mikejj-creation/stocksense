@@ -2,7 +2,7 @@
 
 import yfinance as yf
 
-from mcp_finance.data.cache import financials_cache, price_cache, quote_cache
+from stocksense.data.cache import financials_cache, price_cache, quote_cache
 
 
 def fetch_price_history(

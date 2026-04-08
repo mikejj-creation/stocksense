@@ -10,11 +10,11 @@ Delivered a functional MCP server that can be `pip install`-ed, connected to Cla
 
 ### Action Items
 
-- [x] `src/mcp_finance/data/cache.py` — In-memory TTL cache with expiry timestamps
-- [x] `src/mcp_finance/data/market.py` — yfinance wrapper with caching (`fetch_price_history`, `fetch_quote`)
-- [x] `src/mcp_finance/tools/price_history.py` — Tool functions (`get_price_history`, `get_quote`)
-- [x] `src/mcp_finance/server.py` — FastMCP server with stdio transport, registers price tools
-- [x] `src/mcp_finance/__main__.py` — Module runner (`python -m mcp_finance`)
+- [x] `src/stocksense/data/cache.py` — In-memory TTL cache with expiry timestamps
+- [x] `src/stocksense/data/market.py` — yfinance wrapper with caching (`fetch_price_history`, `fetch_quote`)
+- [x] `src/stocksense/tools/price_history.py` — Tool functions (`get_price_history`, `get_quote`)
+- [x] `src/stocksense/server.py` — FastMCP server with stdio transport, registers price tools
+- [x] `src/stocksense/__main__.py` — Module runner (`python -m stocksense`)
 - [x] `tests/test_cache.py` — 6 unit tests for TTL cache
 - [x] `tests/test_price_history.py` — 6 integration tests for price data + tool output format
 - [x] `pyproject.toml` — Add `[project.scripts]` entry point
@@ -47,7 +47,7 @@ SEC EDGAR provides:
 
 #### Data Layer
 
-- [x] `src/mcp_finance/data/edgar.py` — SEC EDGAR client
+- [x] `src/stocksense/data/edgar.py` — SEC EDGAR client
   - [x] `_build_cik_map()` — Fetch and cache ticker→CIK mapping from `company_tickers.json`
   - [x] `_edgar_get(url)` — Shared request helper with User-Agent header, rate limiting (0.12s delay), 30s timeout, gzip decompression
   - [x] `fetch_filings(ticker, form_type, limit)` — Query submissions JSON, return filing metadata (date, accession, form type, items, primary doc)
@@ -57,15 +57,15 @@ SEC EDGAR provides:
 
 #### Tools
 
-- [x] `src/mcp_finance/tools/sec_filings.py` — MCP tool definitions
+- [x] `src/stocksense/tools/sec_filings.py` — MCP tool definitions
   - [x] `search_filings(ticker, form_type="10-K", limit=10)` — Search SEC filings, return metadata list
   - [x] `get_filing(ticker, accession_number)` — Fetch full filing document text (truncated for LLM context)
-- [x] `src/mcp_finance/tools/insider_trades.py` — MCP tool definitions
+- [x] `src/stocksense/tools/insider_trades.py` — MCP tool definitions
   - [x] `get_insider_trades(ticker, limit=20)` — Return recent insider transactions with structured data
 
 #### Server Registration
 
-- [x] `src/mcp_finance/server.py` — Register new tools (`search_filings`, `get_filing`, `insider_trades`)
+- [x] `src/stocksense/server.py` — Register new tools (`search_filings`, `get_filing`, `insider_trades`)
 
 #### Tests
 
@@ -127,19 +127,19 @@ For `analyze_company`, we aggregate data from all existing tools into a structur
 
 #### Data Layer
 
-- [x] `src/mcp_finance/data/market.py` — Add financial statement fetching
+- [x] `src/stocksense/data/market.py` — Add financial statement fetching
   - [x] `fetch_financials(ticker, statement)` — Income statement, balance sheet, cash flow from yfinance
   - [x] `fetch_analyst_info(ticker)` — Analyst recommendations and target prices from yfinance
   - [x] Cache with 30 min TTL (financials don't change intraday)
 
 #### Tools
 
-- [x] `src/mcp_finance/tools/financials.py` — MCP tool definitions
+- [x] `src/stocksense/tools/financials.py` — MCP tool definitions
   - [x] `get_financials(ticker, statement="income")` — Return financial statement data
     - `statement` options: `income`, `balance_sheet`, `cash_flow`, `all`
     - Returns structured dict with annual data, rounded for LLM readability
     - Include key ratios: profit margin, ROE, debt/equity, current ratio, etc.
-- [x] `src/mcp_finance/tools/analyze.py` — MCP tool definitions
+- [x] `src/stocksense/tools/analyze.py` — MCP tool definitions
   - [x] `analyze_company(ticker)` — Aggregate research brief
     - Current quote + price context (52-week range, % from high/low)
     - Key financial metrics (revenue, net income, margins, growth)
@@ -150,7 +150,7 @@ For `analyze_company`, we aggregate data from all existing tools into a structur
 
 #### Server Registration
 
-- [x] `src/mcp_finance/server.py` — Register `financials` and `analyze_company` tools
+- [x] `src/stocksense/server.py` — Register `financials` and `analyze_company` tools
 
 #### Tests
 
@@ -200,11 +200,11 @@ Polish the project for public consumption: proper PyPI metadata, input validatio
 ### Action Items
 
 - [x] `pyproject.toml` — Full PyPI metadata (description, keywords, classifiers, URLs, version constraints)
-- [x] `src/mcp_finance/__init__.py` — Add `__version__`
-- [x] `src/mcp_finance/tools/validation.py` — Input validation module
+- [x] `src/stocksense/__init__.py` — Add `__version__`
+- [x] `src/stocksense/tools/validation.py` — Input validation module
   - [x] Ticker format validation (regex, normalization)
   - [x] Period, interval, statement, limit validation with clear error messages
-- [x] `src/mcp_finance/server.py` — Wire validation into all tool endpoints
+- [x] `src/stocksense/server.py` — Wire validation into all tool endpoints
 - [x] `LICENSE` — MIT license file
 - [x] `tests/test_validation.py` — 18 validation tests
 - [x] Ruff linting — All lint issues fixed, 0 errors
@@ -237,11 +237,11 @@ Add GitHub Actions CI pipeline and a company comparison tool for multi-ticker an
   - [x] Lint job (ruff on Python 3.11)
   - [x] Test job (unit tests on Python 3.11, 3.12, 3.13)
   - [x] Runs on push to main and PRs
-- [x] `src/mcp_finance/tools/compare.py` — Company comparison tool
+- [x] `src/stocksense/tools/compare.py` — Company comparison tool
   - [x] `compare_companies(tickers)` — Side-by-side metrics comparison
   - [x] Fetches quote + financials for each ticker
   - [x] Graceful degradation on individual ticker failures
-- [x] `src/mcp_finance/server.py` — Register `compare_companies` tool with validation
+- [x] `src/stocksense/server.py` — Register `compare_companies` tool with validation
 - [x] `tests/test_compare.py` — 4 comparison tests
 - [x] `README.md` — Add `compare_companies` to tools table and examples
 
@@ -267,13 +267,13 @@ Add earnings history (EPS estimates vs actuals) and company profile (sector, ind
 
 ### Action Items
 
-- [x] `src/mcp_finance/data/market.py` — Add data fetching
+- [x] `src/stocksense/data/market.py` — Add data fetching
   - [x] `fetch_earnings_history(ticker)` — Quarterly EPS data from yfinance
   - [x] `fetch_sector_info(ticker)` — Sector, industry, employee count, business summary
-- [x] `src/mcp_finance/tools/earnings.py` — `get_earnings` tool
-- [x] `src/mcp_finance/tools/company_profile.py` — `get_company_profile` tool
-- [x] `src/mcp_finance/tools/analyze.py` — Enhanced with earnings + profile sections
-- [x] `src/mcp_finance/server.py` — Register `earnings` and `company_profile` tools
+- [x] `src/stocksense/tools/earnings.py` — `get_earnings` tool
+- [x] `src/stocksense/tools/company_profile.py` — `get_company_profile` tool
+- [x] `src/stocksense/tools/analyze.py` — Enhanced with earnings + profile sections
+- [x] `src/stocksense/server.py` — Register `earnings` and `company_profile` tools
 - [x] `tests/test_earnings.py` — 4 earnings tests
 - [x] `tests/test_company_profile.py` — 4 company profile tests
 - [x] `README.md` — Add new tools and example queries
@@ -294,12 +294,12 @@ Add dividend history/yield tool and upcoming key events (earnings dates, estimat
 
 ### Action Items
 
-- [x] `src/mcp_finance/data/market.py` — Add data fetching
+- [x] `src/stocksense/data/market.py` — Add data fetching
   - [x] `fetch_dividends(ticker)` — Dividend history, rate, yield, payout ratio
   - [x] `fetch_key_events(ticker)` — Upcoming earnings dates, EPS/revenue estimates, ex-dividend date
-- [x] `src/mcp_finance/tools/dividends.py` — `get_dividends` tool
-- [x] `src/mcp_finance/tools/events.py` — `get_key_events` tool
-- [x] `src/mcp_finance/server.py` — Register `dividends` and `key_events` tools
+- [x] `src/stocksense/tools/dividends.py` — `get_dividends` tool
+- [x] `src/stocksense/tools/events.py` — `get_key_events` tool
+- [x] `src/stocksense/server.py` — Register `dividends` and `key_events` tools
 - [x] `tests/test_dividends.py` — 4 dividend tests
 - [x] `tests/test_events.py` — 4 events tests
 - [x] `README.md` — Add new tools and example queries
@@ -320,15 +320,15 @@ Add technical analysis tool computing SMA, EMA, RSI, MACD, signals, and performa
 
 ### Action Items
 
-- [x] `src/mcp_finance/data/technicals.py` — Technical indicator calculations
+- [x] `src/stocksense/data/technicals.py` — Technical indicator calculations
   - [x] SMA (20, 50, 200-day)
   - [x] EMA (12, 26-day)
   - [x] RSI (14-day)
   - [x] MACD (12/26/9)
   - [x] Performance stats (1w, 1m, 3m, 6m, YTD)
   - [x] Trading signals (overbought/oversold, MA crossovers)
-- [x] `src/mcp_finance/tools/technicals.py` — `get_technicals` tool
-- [x] `src/mcp_finance/server.py` — Register `technicals` tool
+- [x] `src/stocksense/tools/technicals.py` — `get_technicals` tool
+- [x] `src/stocksense/server.py` — Register `technicals` tool
 - [x] `tests/test_technicals.py` — 11 tests (unit + integration)
 - [x] `README.md` — Add new tool and example queries
 

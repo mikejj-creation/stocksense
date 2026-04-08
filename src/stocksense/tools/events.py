@@ -1,6 +1,6 @@
 """MCP tool definitions for key company events."""
 
-from mcp_finance.data.market import fetch_key_events
+from stocksense.data.market import fetch_key_events
 
 
 def get_key_events(ticker: str) -> dict:

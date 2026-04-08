@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_dividends
-from mcp_finance.tools.dividends import get_dividends
+from stocksense.data.market import fetch_dividends
+from stocksense.tools.dividends import get_dividends
 
 
 class TestFetchDividends:

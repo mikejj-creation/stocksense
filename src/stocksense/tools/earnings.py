@@ -1,6 +1,6 @@
 """MCP tool definitions for earnings data."""
 
-from mcp_finance.data.market import fetch_earnings_history
+from stocksense.data.market import fetch_earnings_history
 
 
 def get_earnings(ticker: str) -> dict:

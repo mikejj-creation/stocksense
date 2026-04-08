@@ -1,6 +1,6 @@
 """Technical indicator calculations from price data."""
 
-from mcp_finance.data.market import fetch_price_history
+from stocksense.data.market import fetch_price_history
 
 
 def _get_closes(ticker: str, period: str = "1y") -> list[float]:
