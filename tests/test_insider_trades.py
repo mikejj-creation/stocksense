@@ -1,6 +1,6 @@
 """Tests for insider trades tool output format."""
 
-from mcp_finance.tools.insider_trades import get_insider_trades
+from stocksense.tools.insider_trades import get_insider_trades
 
 
 class TestGetInsiderTrades:

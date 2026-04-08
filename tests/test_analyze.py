@@ -1,7 +1,7 @@
 """Tests for company analysis tool."""
 
 
-from mcp_finance.tools.analyze import analyze_company
+from stocksense.tools.analyze import analyze_company
 
 
 class TestAnalyzeCompany:

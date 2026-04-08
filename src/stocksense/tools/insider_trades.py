@@ -1,6 +1,6 @@
 """MCP tool definitions for insider trades."""
 
-from mcp_finance.data.edgar import fetch_insider_trades
+from stocksense.data.edgar import fetch_insider_trades
 
 
 def get_insider_trades(ticker: str, limit: int = 20) -> dict:

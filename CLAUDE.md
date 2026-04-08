@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-MCP Finance Server — an open-source MCP server providing AI agents with access to financial data (SEC filings, fundamentals, insider trades, price history).
+StockSense — an open-source MCP server providing AI agents with access to financial data (SEC filings, fundamentals, insider trades, price history).
 
 ## Tech Stack
 
@@ -15,9 +15,9 @@ MCP Finance Server — an open-source MCP server providing AI agents with access
 ## Project Structure
 
 ```
-mcp-finance-server/
+stocksense/
 ├── src/
-│   └── mcp_finance/
+│   └── stocksense/
 │       ├── __init__.py
 │       ├── server.py          # MCP server entry point
 │       ├── tools/             # Individual MCP tool implementations
@@ -43,7 +43,7 @@ mcp-finance-server/
 pip install -e ".[dev]"
 
 # Run the server
-python -m mcp_finance.server
+python -m stocksense
 
 # Run tests
 pytest

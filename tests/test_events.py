@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_key_events
-from mcp_finance.tools.events import get_key_events
+from stocksense.data.market import fetch_key_events
+from stocksense.tools.events import get_key_events
 
 
 class TestFetchKeyEvents:

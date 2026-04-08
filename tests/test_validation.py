@@ -2,7 +2,7 @@
 
 import pytest
 
-from mcp_finance.tools.validation import (
+from stocksense.tools.validation import (
     validate_interval,
     validate_limit,
     validate_period,

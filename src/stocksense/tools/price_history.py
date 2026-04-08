@@ -1,6 +1,6 @@
 """MCP tool definitions for price history."""
 
-from mcp_finance.data.market import fetch_price_history, fetch_quote
+from stocksense.data.market import fetch_price_history, fetch_quote
 
 
 def get_price_history(ticker: str, period: str = "1mo", interval: str = "1d") -> dict:

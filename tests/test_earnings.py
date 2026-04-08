@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_earnings_history
-from mcp_finance.tools.earnings import get_earnings
+from stocksense.data.market import fetch_earnings_history
+from stocksense.tools.earnings import get_earnings
 
 
 class TestFetchEarningsHistory:

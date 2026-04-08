@@ -1,6 +1,6 @@
 """MCP tool definitions for dividend data."""
 
-from mcp_finance.data.market import fetch_dividends
+from stocksense.data.market import fetch_dividends
 
 
 def get_dividends(ticker: str) -> dict:

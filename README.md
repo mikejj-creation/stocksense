@@ -1,4 +1,4 @@
-# MCP Finance Server
+# StockSense
 
 An MCP (Model Context Protocol) server that gives AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, and price history.
 
@@ -20,10 +20,10 @@ pip install -e ".[dev]"
 
 ```bash
 # Either:
-mcp-finance
+stocksense
 
 # Or:
-python -m mcp_finance
+python -m stocksense
 ```
 
 ### Claude Desktop configuration
@@ -33,8 +33,8 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 ```json
 {
   "mcpServers": {
-    "finance": {
-      "command": "mcp-finance"
+    "stocksense": {
+      "command": "stocksense"
     }
   }
 }

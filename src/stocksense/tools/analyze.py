@@ -1,7 +1,7 @@
 """MCP tool definitions for company analysis."""
 
-from mcp_finance.data.edgar import fetch_filings, fetch_insider_trades
-from mcp_finance.data.market import (
+from stocksense.data.edgar import fetch_filings, fetch_insider_trades
+from stocksense.data.market import (
     fetch_analyst_info,
     fetch_earnings_history,
     fetch_financials,

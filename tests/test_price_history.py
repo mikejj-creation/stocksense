@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_price_history, fetch_quote
-from mcp_finance.tools.price_history import get_price_history, get_quote
+from stocksense.data.market import fetch_price_history, fetch_quote
+from stocksense.tools.price_history import get_price_history, get_quote
 
 
 class TestFetchPriceHistory:

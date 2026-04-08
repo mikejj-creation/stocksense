@@ -2,8 +2,8 @@
 
 import pytest
 
-from mcp_finance.data.market import fetch_financials
-from mcp_finance.tools.financials import get_financials
+from stocksense.data.market import fetch_financials
+from stocksense.tools.financials import get_financials
 
 
 class TestFetchFinancials:

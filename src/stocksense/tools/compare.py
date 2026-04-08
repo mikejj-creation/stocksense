@@ -1,6 +1,6 @@
 """MCP tool definitions for comparing multiple companies."""
 
-from mcp_finance.data.market import fetch_financials, fetch_quote
+from stocksense.data.market import fetch_financials, fetch_quote
 
 
 def compare_companies(tickers: list[str]) -> dict:
