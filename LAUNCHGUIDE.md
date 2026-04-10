@@ -1,9 +1,7 @@
-# LAUNCHGUIDE
+# StockSense
 
-## Server Info
+MCP server giving AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, price history, technicals, and more. No API keys needed.
 
-- **Name:** StockSense
-- **Description:** MCP server giving AI agents access to financial data — SEC EDGAR filings, market fundamentals, insider trades, price history, technicals, and more. No API keys needed.
 - **Version:** 0.1.1
 - **License:** MIT
 - **Language:** Python
